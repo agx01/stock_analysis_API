@@ -32,7 +32,7 @@ class Stocks{
     function read(){
 
         //select all query
-        $query = "SELECT s.SYMBOL, s.TRADING_DATE, s.SERIES, s.PREV_CLOSE, s.OPEN, s.HIGH, s.LOW, s.CLOSE, s.LAST_PRICE, s.AVG_PRICE, s.TTL_TRD_QNTY, s.TURNOVER_LACS, s.NO_OF_TRADES, s.DELIV_QTY, s.DELIV_PER FROM `".$this->table_name."` s";
+        $query = "SELECT s.SYMBOL, s.TRADING_DATE, s.SERIES, s.PREV_CLOSE, s.OPEN, s.HIGH, s.LOW, s.CLOSE, s.LAST_PRICE, s.AVG_PRICE, s.TTL_TRD_QNTY, s.TURNOVER_LACS, s.NO_OF_TRADES, s.DELIV_QTY, s.DELIV_PER FROM `".$this->table_name." s";
         
         
         //prepare query statement
