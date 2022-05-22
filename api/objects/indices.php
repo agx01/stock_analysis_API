@@ -3,7 +3,7 @@
 Class Indices {
 
     private $conn;
-    private $table_name = "daily_index_data"
+    private $table_name = "daily_index_data";
 
     public $index_name;
     public $trading_date;
@@ -40,7 +40,7 @@ Class Indices {
 
         //query to insert record 
         $query = "INSERT INTO ".$this->table_name.
-                 "SET "
+                 "SET ";
     }
 
 }

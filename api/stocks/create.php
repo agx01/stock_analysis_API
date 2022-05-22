@@ -18,7 +18,7 @@ $db = $database->getConnection();
 $stock = new Stocks($db);
 
 //get the posted data
-$data = json_encode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input"));
 
 //make sure data is not empty
 if(
@@ -57,7 +57,7 @@ if(
         //set response code - 503 service unavailable
         http_response_code(503);
 
-        echo json_encode(array("message" => "Unable to create stock record"))
+        echo json_encode(array("message" => "Unable to create stock record"));
     }
 }
 
@@ -66,7 +66,7 @@ else{
     //set response code - 400 bad request
     http_response_code(400);
 
-    echo json_encode(array("message" => "Unable to create product. Data is incomplete"))
+    echo json_encode(array("message" => "Unable to create record. Data is incomplete", "data" => $data));
 }
 
 ?>
