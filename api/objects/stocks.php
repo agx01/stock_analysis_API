@@ -48,21 +48,21 @@ class Stocks{
 
         //query to insert record
         $query = "INSERT INTO ".$this->table_name. 
-                 " SET symbol:=symbol,
-                       trading_date:=trading_date,
-                       series:=series,
-                       prev_close:=prev_close,
-                       open:=open,
-                       high:=high,
-                       low:=low,
-                       close:=close,
-                       last_price:=last_price,
-                       avg_price:=avg_price,
-                       ttl_trd_qnty:=ttl_trd_qnty,
-                       turnover_lacs:=turnover_lacs,
-                       no_of_trades:=no_of_trades,
-                       deliv_qty:=deliv_qty,
-                       deliv_per:=deliv_per";
+                 " SET symbol=:symbol,
+                       trading_date=:trading_date,
+                       series=:series,
+                       prev_close=:prev_close,
+                       open=:open,
+                       high=:high,
+                       low=:low,
+                       close=:close,
+                       last_price=:last_price,
+                       avg_price=:avg_price,
+                       ttl_trd_qnty=:ttl_trd_qnty,
+                       turnover_lacs=:turnover_lacs,
+                       no_of_trades=:no_of_trades,
+                       deliv_qty=:deliv_qty,
+                       deliv_per=:deliv_per";
         
         //prepare query
         $stmt = $this->conn->prepare($query);
@@ -111,7 +111,7 @@ class Stocks{
 
 
     function readOne(){
-
+        //For this function always send data using get without any quotes, quotes added when retrieving through GET method
         //query to read a single record
         $query = "SELECT s.SYMBOL, 
                         s.TRADING_DATE, 
@@ -128,10 +128,15 @@ class Stocks{
                         s.NO_OF_TRADES, 
                         s.DELIV_QTY, 
                         s.DELIV_PER FROM ".$this->table_name." s 
-                    WHERE s.SYMBOL = ? AND s.TRADING_DATE = ? AND s.SERIES = ?";
+                    WHERE s.SYMBOL LIKE ? AND s.TRADING_DATE LIKE ? AND s.SERIES LIKE ?";
 
         //prepare query statement
         $stmt = $this->conn->prepare($query);
+
+        //sanitize
+        $this->symbol = htmlspecialchars(strip_tags($this->symbol));
+        $this->trading_date = htmlspecialchars(strip_tags($this->trading_date));
+        $this->series = htmlspecialchars(strip_tags($this->series));
 
         //bind symbol, trading_date and series of stocks to be updated
         $stmt->bindParam(1, $this->symbol);
@@ -143,23 +148,26 @@ class Stocks{
 
         //Get the retrieved row
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        print_r($row);
+
         //set values to object properties
-        $this->symbol = $row['symbol'];
-        $this->trading_date = $row['trading_date'];
-        $this->series = $row['series'];
-        $this->prev_close = $row['prev_close'];
-        $this->open = $row['open'];
-        $this->high = $row['high'];
-        $this->low = $row['low'];
-        $this->close = $row['close'];
-        $this->last_price = $row['last_price'];
-        $this->avg_price = $row['avg_price'];
-        $this->ttl_trd_qnty = $row['ttl_trd_qnty'];
-        $this->turnover_lacs = $row['turnover_lacs'];
-        $this->no_of_trades = $row['no_of_trades'];
-        $this->deliv_qty = $row['deliv_qty'];
-        $this->deliv_per = $row['deliv_per'];
+        if($row == true){
+            $this->symbol = $row['SYMBOL'];
+            $this->trading_date = $row['TRADING_DATE'];
+            $this->series = $row['SERIES'];
+            $this->prev_close = $row['PREV_CLOSE'];
+            $this->open = $row['OPEN'];
+            $this->high = $row['HIGH'];
+            $this->low = $row['LOW'];
+            $this->close = $row['CLOSE'];
+            $this->last_price = $row['LAST_PRICE'];
+            $this->avg_price = $row['AVG_PRICE'];
+            $this->ttl_trd_qnty = $row['TTL_TRD_QNTY'];
+            $this->turnover_lacs = $row['TURNOVER_LACS'];
+            $this->no_of_trades = $row['NO_OF_TRADES'];
+            $this->deliv_qty = $row['DELIV_QTY'];
+            $this->deliv_per = $row['DELIV_PER'];
+        }
+        
         
     }
 
@@ -168,7 +176,8 @@ class Stocks{
     function update(){
 
         //update query
-        $query = "UPDATE ".$this->table_name." SET 
+        $query = "UPDATE ".$this->table_name." 
+                    SET 
                     prev_close = :prev_close,
                     open = :open,
                     high = :high,
@@ -182,14 +191,17 @@ class Stocks{
                     deliv_qty = :deliv_qty,
                     deliv_per = :deliv_per 
                     WHERE 
-                    symbol = :symbol,
-                    trading_date = :trading_date,
-                    series = :series";
+                    symbol LIKE :symbol AND
+                    trading_date LIKE :trading_date AND
+                    series LIKE :series";
 
         //prepare the query statement
         $stmt = $this->conn->prepare($query);
 
         //sanitize
+        $this->symbol = htmlspecialchars(strip_tags($this->symbol));
+        $this->trading_date = htmlspecialchars(strip_tags($this->trading_date));
+        $this->series = htmlspecialchars(strip_tags($this->series));
         $this->prev_close = htmlspecialchars(strip_tags($this->prev_close));
         $this->open = htmlspecialchars(strip_tags($this->open));
         $this->high = htmlspecialchars(strip_tags($this->high));
@@ -204,6 +216,9 @@ class Stocks{
         $this->deliv_per = htmlspecialchars(strip_tags($this->deliv_per));
         
         //bind new values
+        $stmt->bindParam(':symbol', $this->symbol);
+        $stmt->bindParam(':trading_date', $this->trading_date);
+        $stmt->bindParam(':series', $this->series);
         $stmt->bindParam(':prev_close', $this->prev_close);
         $stmt->bindParam(':open', $this->open);
         $stmt->bindParam(':high', $this->high);
@@ -243,7 +258,7 @@ class Stocks{
         //bind the symbol, trading_date and series to delete
         $stmt->bindParam(1, $this->symbol);
         $stmt->bindParam(2, $this->trading_date);
-        $stmt->bindParam(3, $this->bindParam);
+        $stmt->bindParam(3, $this->series);
 
         //execute query
         if($stmt->execute()){

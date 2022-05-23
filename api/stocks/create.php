@@ -66,7 +66,8 @@ else{
     //set response code - 400 bad request
     http_response_code(400);
 
-    echo json_encode(array("message" => "Unable to create record. Data is incomplete", "data" => $data));
+    echo json_encode(array("message" => "Unable to create record. Data is incomplete"));
+    print_r($data);
 }
 
 ?>

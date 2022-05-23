@@ -35,21 +35,21 @@ if($num>0){
         extract($row);
 
         $stock_item = array(
-            "symbol" => $symbol,
-            "trading_date" => $trading_date,
-            "series" => $series,
-            "prev_close" => $prev_close,
-            "open" => $open,
-            "high" => $high,
-            "low" => $low,
-            "close" => $close,
-            "last_price" => $last_price,
-            "avg_price" => $avg_price,
-            "ttl_trd_qnty" => $ttl_trd_qnty,
-            "turnover_lacs" => $turnover_lacs,
-            "no_of_trades" => $no_of_trades,
-            "deliv_qty" => $deliv_qty,
-            "deliv_per" => $deliv_per
+            "symbol" => $SYMBOL,
+            "trading_date" => $TRADING_DATE,
+            "series" => $SERIES,
+            "prev_close" => $PREV_CLOSE,
+            "open" => $OPEN,
+            "high" => $HIGH,
+            "low" => $LOW,
+            "close" => $CLOSE,
+            "last_price" => $LAST_PRICE,
+            "avg_price" => $AVG_PRICE,
+            "ttl_trd_qnty" => $TTL_TRD_QNTY,
+            "turnover_lacs" => $TURNOVER_LACS,
+            "no_of_trades" => $NO_OF_TRADES,
+            "deliv_qty" => $DELIV_QTY,
+            "deliv_per" => $DELIV_PER
         );
 
         array_push($stocks_arr["records"], $stock_item);

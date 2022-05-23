@@ -9,7 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 //include database and object files
 include_once '../config/database.php';
-include_once '../config/stocks.php';
+include_once '../objects/stocks.php';
 
 //get database connection
 $database = new Database();
@@ -25,6 +25,20 @@ $data = json_decode(file_get_contents("php://input"));
 $stock->symbol = $data->symbol;
 $stock->trading_date = $data->trading_date;
 $stock->series = $data->series;
+
+//set the remaining record values
+$stock->prev_close = $data->prev_close;
+$stock->open = $data->open;
+$stock->high = $data->high;
+$stock->low = $data->low;
+$stock->close = $data->close;
+$stock->last_price = $data->last_price;
+$stock->avg_price = $data->avg_price;
+$stock->ttl_trd_qnty = $data->ttl_trd_qnty;
+$stock->turnover_lacs = $data->turnover_lacs;
+$stock->no_of_trades = $data->no_of_trades;
+$stock->deliv_qty = $data->deliv_qty;
+$stock->deliv_per = $data->deliv_per;
 
 //Update the stock record
 if($stock->update()){
