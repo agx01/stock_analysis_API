@@ -1,19 +1,20 @@
 <?php
 
-$base_url = "https://archives.nseindia.com/products/content/";
-$file_date = date("dmY",mktime(0, 0, 0, date("m"), date("d"),date("Y")));
+//Including the core file to access folder and url names
+require_once '../config/core.php';
+
+$file_date = date("dmY",mktime(-1, 0, 0, date("m"), date("d"),date("Y")));
 //$file_date = date("Y-m-d", strtotime("yesterday"));
 $bhavcopy_name = "sec_bhavdata_full_".$file_date.".csv";
 
 //Initialize our url
-//$url = 'https://media.geeksforgeeks.org/wp-content/uploads/gfg-40.png';
 $url = $base_url.$bhavcopy_name;
 
 $ch = curl_init($url);
 
- if($ch !== false){
+if($ch !== false){
     //Initialize directory
-    $dir = dirname(__DIR__, 1) . "\data\\";
+    $dir = "..\data\\";
     
     //Get the base name of the file
     $file_name = basename($url);
@@ -79,7 +80,8 @@ if(($handle = fopen($save_file_loc, "r")) !== FALSE){
         echo "\n$num";
         echo "<p> $num fields in line $row: <br /></p>\n";
         if($row !== 1){
-            echo httPost("localhost/stock_analysis_API/api/stocks/create.php", json_encode($conv_data));
+            echo $home_url."stocks/create.php";
+            echo httPost($home_url."/stocks/create.php", json_encode($conv_data));
         }
         $row++;
         for ($c=0; $c < $num; $c++){

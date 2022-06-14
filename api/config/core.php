@@ -4,8 +4,29 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+//Check if the code is for test or server
+$is_test = true;
+
+//NSE url link
+$base_url = "https://archives.nseindia.com/products/content/";
+
+if($is_test == true){
+    //home page url for testing
+    $home_url = "http://localhost/stock_analysis_API/api/";
+
+    //API root folder
+    $api_root = "..\api\\";
+}
+else{
+    //home page url for server
+    $home_url = "www.arijitganguly.com/api/";
+    
+    //API root folder
+    $api_root = "..\api\\";
+}
+
 //home page url
-$home_url = "http://localhost/api/";
+//$home_url = "http://localhost/api/";
 
 //page given in URL parameter, default page one
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
