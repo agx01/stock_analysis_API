@@ -2,6 +2,8 @@
 
 //Including the core file to access folder and url names
 require_once '../config/core.php';
+require_once '../config/database.php';
+require_once '../objects/stocks.php';
 
 $file_date = date("dmY",mktime(-1, 0, 0, date("m"), date("d"),date("Y")));
 //$file_date = date("Y-m-d", strtotime("yesterday"));
@@ -80,8 +82,47 @@ if(($handle = fopen($save_file_loc, "r")) !== FALSE){
         echo "\n$num";
         echo "<p> $num fields in line $row: <br /></p>\n";
         if($row !== 1){
-            echo $home_url."stocks/create.php";
-            echo httPost($home_url."/stocks/create.php", json_encode($conv_data));
+            $database = new Database();
+            $db = $database->getConnection();
+
+            $stock = new Stocks($db);
+            if(!empty($data[0])&&
+                !empty($data[1])&&
+                !empty($data[2])){
+                    $stock->symbol = $data[0];
+                    $stock->series = $data[1];
+                    $stock->trading_date = $data[2];
+                    $stock->prev_close = $data[3];
+                    $stock->open = $data[4];
+                    $stock->high = $data[5];
+                    $stock->low = $data[6];
+                    $stock->close = $data[8];
+                    $stock->last_price = $data[7];
+                    $stock->avg_price = $data[9];
+                    $stock->ttl_trd_qnty = $data[10];
+                    $stock->turnover_lacs = $data[11];
+                    $stock->no_of_trades = $data[12];
+                    $stock->deliv_qty = $data[13];
+                    $stock->deliv_per = $data[14];
+
+                    //create the stock record
+                    if($stock->create()){
+                        
+                        //set response code
+                        http_response_code(201);
+
+                        echo json_encode(array("message" => "Stock Record was created"));
+                    }
+                    else{
+
+                        //set response code - 503 service unavailable
+                        http_response_code(503);
+
+                        echo json_encode(array("message" => "Unable to create stock record"));
+                    }
+                }
+            //echo $home_url."stocks/create.php";
+            //echo httPost($home_url."/stocks/create.php", json_encode($conv_data));
         }
         $row++;
         for ($c=0; $c < $num; $c++){
