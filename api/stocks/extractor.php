@@ -91,7 +91,7 @@ if(($handle = fopen($save_file_loc, "r")) !== FALSE){
                 !empty($data[2])){
                     $stock->symbol = $data[0];
                     $stock->series = $data[1];
-                    $stock->trading_date = $data[2];
+                    $stock->trading_date = date('Y-m-d', strtotime($data[2]));
                     $stock->prev_close = $data[3];
                     $stock->open = $data[4];
                     $stock->high = $data[5];
